@@ -1,0 +1,234 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model auth_group {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String  @unique
+}
+
+model auth_group_permissions {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  group_id      Int
+  internal_id   Int @unique(map: "__primary_key__") @map("id")
+  permission_id Json?
+
+  @@unique([group_id, permission_id], map: "auth_group_permissions_group_id_permission_id_0cd325b0_uniq")
+  @@index([group_id], map: "auth_group_permissions_group_id_b120cbf9")
+  @@index([permission_id], map: "auth_group_permissions_permission_id_84c5c92e")
+}
+
+model auth_permission {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  codename        String
+  content_type_id Int
+  internal_id     Int    @unique(map: "__primary_key__") @map("id")
+  name            String
+
+  @@unique([content_type_id, codename], map: "auth_permission_content_type_id_codename_01ab375a_uniq")
+  @@index([content_type_id], map: "auth_permission_content_type_id_2f476e4b")
+}
+
+model auth_user {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  internal_id  Int      @unique(map: "__primary_key__") @map("id")
+  date_joined  DateTime @db.Date
+  email        String
+  first_name   String
+  is_active    Boolean
+  is_staff     Boolean
+  is_superuser Boolean
+  last_login   DateTime @db.Date
+  last_name    String
+  password     String
+  username     String   @unique(map: "username_1")
+}
+
+model auth_user_groups {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+
+  group_id Int
+  user_id  Int
+}
+
+model auth_user_user_permissions {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+
+  permission_id Int
+  user_id       Int
+}
+
+type SchemaAuto {
+  field_names String[]
+  seq         Int
+}
+
+type SchemaFields {
+  action_flag     SchemaFieldsActionFlag?
+  action_time     SchemaFieldsActionTime?
+  app             SchemaFieldsApp?
+  app_label       SchemaFieldsAppLabel?
+  applied         SchemaFieldsApplied?
+  change_message  SchemaFieldsChangeMessage?
+  codename        SchemaFieldsCodename?
+  content_type_id SchemaFieldsContentTypeId?
+  date_joined     SchemaFieldsDateJoined?
+  domain          SchemaFieldsDomain?
+  email           SchemaFieldsEmail?
+  expire_date     SchemaFieldsExpireDate?
+  first_name      SchemaFieldsFirstName?
+  group_id        SchemaFieldsGroupId?
+  id              SchemaFieldsId?
+  is_active       SchemaFieldsIsActive?
+  is_staff        SchemaFieldsIsStaff?
+  is_superuser    SchemaFieldsIsSuperuser?
+  last_login      SchemaFieldsLastLogin?
+  last_name       SchemaFieldsLastName?
+  model           SchemaFieldsModel?
+  name            SchemaFieldsName?
+  object_id       SchemaFieldsObjectId?
+  object_repr     SchemaFieldsObjectRepr?
+  password        SchemaFieldsPassword?
+  permission_id   SchemaFieldsPermissionId?
+  session_data    SchemaFieldsSessionData?
+  session_key     SchemaFieldsSessionKey?
+  user_id         SchemaFieldsUserId?
+  username        SchemaFieldsUsername?
+}
+
+type SchemaFieldsActionFlag {
+  type_code String
+}
+
+type SchemaFieldsActionTime {
+  type_code String
+}
+
+type SchemaFieldsApp {
+  type_code String
+}
+
+type SchemaFieldsAppLabel {
+  type_code String
+}
+
+type SchemaFieldsApplied {
+  type_code String
+}
+
+type SchemaFieldsChangeMessage {
+  type_code String
+}
+
+type SchemaFieldsCodename {
+  type_code String
+}
+
+type SchemaFieldsContentTypeId {
+  type_code String
+}
+
+type SchemaFieldsDateJoined {
+  type_code String
+}
+
+type SchemaFieldsDomain {
+  type_code String
+}
+
+type SchemaFieldsEmail {
+  type_code String
+}
+
+type SchemaFieldsExpireDate {
+  type_code String
+}
+
+type SchemaFieldsFirstName {
+  type_code String
+}
+
+type SchemaFieldsGroupId {
+  type_code String
+}
+
+type SchemaFieldsId {
+  type_code String
+}
+
+type SchemaFieldsIsActive {
+  type_code String
+}
+
+type SchemaFieldsIsStaff {
+  type_code String
+}
+
+type SchemaFieldsIsSuperuser {
+  type_code String
+}
+
+type SchemaFieldsLastLogin {
+  type_code String
+}
+
+type SchemaFieldsLastName {
+  type_code String
+}
+
+type SchemaFieldsModel {
+  type_code String
+}
+
+type SchemaFieldsName {
+  type_code String
+}
+
+type SchemaFieldsObjectId {
+  type_code String
+}
+
+type SchemaFieldsObjectRepr {
+  type_code String
+}
+
+type SchemaFieldsPassword {
+  type_code String
+}
+
+type SchemaFieldsPermissionId {
+  type_code String
+}
+
+type SchemaFieldsSessionData {
+  type_code String
+}
+
+type SchemaFieldsSessionKey {
+  type_code String
+}
+
+type SchemaFieldsUserId {
+  type_code String
+}
+
+type SchemaFieldsUsername {
+  type_code String
+}
+
+model schema__ {
+  @@ignore
+  id     String       @id @default(auto()) @map("_id") @db.ObjectId
+  auto   SchemaAuto?
+  fields SchemaFields
+  name   String       @unique(map: "name_1")
+
+  @@index([auto], map: "auto_1")
+  @@map("__schema__")
+}
